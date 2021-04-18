@@ -1,8 +1,10 @@
 using OVR.OpenVR;
 using Paroxe.PdfRenderer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static OVRInput;
 
 public class BookBehavior : MonoBehaviour
 {
@@ -15,9 +17,13 @@ public class BookBehavior : MonoBehaviour
 #if UNITY_STANDALONE
     private string m_Path = @"N:\Not Illegal Books\Books\!Textbooks\Programming in Lua 3rd Edition.pdf";
 #endif
+    private Animator m_Animatior;
+    private bool open = false;
 
     private void Start()
     {
+        m_Animatior = GetComponent<Animator>();
+
         PDFDocument pdfDocument = new PDFDocument(m_Path);
 
         if (pdfDocument.IsValid)
@@ -48,4 +54,21 @@ public class BookBehavior : MonoBehaviour
             backcover.material.mainTexture = tex;
         }
     }
+
+    private void Update()
+    {
+        // If the trigger is pressed and the player is holding the book, open/close the book
+        if (OVRInput.GetDown(OVRInput.Button.Four))
+        {
+            if (!GetComponent<OVRGrabbable>().grabbed)
+                return;
+
+            if (open)
+                m_Animatior.SetTrigger("Close");
+            else
+                m_Animatior.SetTrigger("Open");
+            open = !open;
+        }
+    }
+
 }
