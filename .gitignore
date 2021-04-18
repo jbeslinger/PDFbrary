@@ -60,3 +60,6 @@ crashlytics-build.properties
 
 # All copyright Paroxe package files
 Paroxe/
+
+# All Oculus integration package files
+Oculus/
